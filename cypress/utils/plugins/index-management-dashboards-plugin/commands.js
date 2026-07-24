@@ -171,3 +171,10 @@ Cypress.Commands.add('removeIndexAlias', (alias) => {
     failOnStatusCode: false,
   });
 });
+
+Cypress.Commands.add('dismissToast', () => {
+  cy.get('[data-test-subj="toastCloseButton"]', { timeout: 10000 })
+    .first()
+    .click({ force: true });
+  cy.wait(500);
+});

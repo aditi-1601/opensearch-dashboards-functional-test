@@ -143,8 +143,8 @@ describe('Aliases', () => {
   describe('can flush an alias', () => {
     it('successfully flush an index', () => {
       let sample_alias = `${SAMPLE_ALIAS_PREFIX}-${1}`;
-      // Sort all aliases in asc order to make it at first page
-      cy.contains('Alias name').click();
+      // Search for the alias to bring it onto the first page
+      cy.get('[placeholder="Search..."]').type(`${sample_alias}{enter}`);
       // Confirm we have our initial alias
       cy.contains(sample_alias);
       // index a test doc
@@ -170,19 +170,16 @@ describe('Aliases', () => {
         expect(num).not.equal(0);
       });
 
-      cy.get('[data-test-subj="moreAction"]').click();
       // Flush btn should be disabled if no items selected
-      cy.get('[data-test-subj="Flush Action"]').should(
-        'have.class',
-        'euiContextMenuItem-isDisabled'
-      );
+      cy.get('[data-test-subj="moreAction"] button').click();
+      cy.get('[data-test-subj="Flush Action"]').should('be.disabled');
 
       // Select an alias
-      cy.get(`[data-test-subj="checkboxSelectRow-${sample_alias}"]`).check({
+      cy.get(`#_selection_column_${sample_alias}-checkbox`).click({
         force: true,
       });
 
-      cy.get('[data-test-subj="moreAction"]').click();
+      cy.get('[data-test-subj="moreAction"] button').click();
 
       // Extra wait required for page data to load, otherwise "Enable" button will be disabled
       cy.wait(2000);
@@ -190,7 +187,7 @@ describe('Aliases', () => {
       // Flush btn should be enabled
       cy.get('[data-test-subj="Flush Action"]')
         .should('exist')
-        .should('not.have.class', 'euiContextMenuItem-isDisabled')
+        .should('not.be.disabled')
         .click();
 
       // Check for flush index modal
