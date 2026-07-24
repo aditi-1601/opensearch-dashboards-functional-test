@@ -156,7 +156,7 @@ Cypress.Commands.add('login', () => {
   });
 });
 
-// This function does not delete all indices
+// Delete all indices, ignore errors
 Cypress.Commands.add('deleteAllIndices', () => {
   cy.log('Deleting all indices');
   cy.request({
